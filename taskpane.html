@@ -4890,18 +4890,18 @@ let   _backendAlive = null; // null=unknown, true/false
 
 // Tier → backend route map
 const TIER_ROUTE = {
-  'data-cleaning':    '/api/clean',
-  'filter-search':    '/api/filter',
-  'transform':        '/api/transform',
-  'statistics':       '/api/stats',
-  'machine-learning': '/api/ml',
-  'visualization':    '/api/viz',
-  'ai-insights':      '/api/ai',
-  'data-import':      '/api/import',
-  'data-export':      '/api/export',
-  'data-profiling':   '/api/profiling',
-  'data-engineering': '/api/dataeng',
-  'productivity':     '/api/productivity',
+  'clean':       '/api/clean',
+  'filter':      '/api/filter',
+  'transform':   '/api/transform',
+  'stats':       '/api/stats',
+  'ml':          '/api/ml',
+  'viz':         '/api/viz',
+  'ai':          '/api/ai',
+  'import':      '/api/import',
+  'export':       '/api/export',
+  'profiling':    '/api/profiling',
+  'dataeng':      '/api/dataeng',
+  'productivity': '/api/productivity',
 };
 
 async function _checkBackend() {
@@ -4915,7 +4915,19 @@ async function _checkBackend() {
 
 async function _callBackend(tierId, toolId, params, headers, rows) {
   const route = TIER_ROUTE[tierId];
-  if (!route) throw new Error('Unknown tier: '+tierId);
+  if (!route) {
+    const msgs = {
+      fa: 'این ابزار در حال حاضر در دسترس نیست. لطفاً دوباره امتحان کنید.',
+      ar: 'هذه الأداة غير متاحة حالياً. يرجى المحاولة مرة أخرى.',
+      de: 'Dieses Tool ist derzeit nicht verfügbar. Bitte erneut versuchen.',
+      fr: 'Cet outil n\'est pas disponible. Veuillez réessayer.',
+      es: 'Esta herramienta no está disponible. Por favor, inténtelo de nuevo.',
+      zh: '此工具暂不可用，请重试。',
+      ru: 'Этот инструмент недоступен. Пожалуйста, попробуйте снова.',
+      hi: 'यह टूल अभी उपलब्ध नहीं है। कृपया पुनः प्रयास करें।',
+    };
+    throw new Error(msgs[lang] || 'This tool is not available. Please try again.');
+  }
   const body = JSON.stringify({
     tool_id: toolId,
     params,
@@ -5349,55 +5361,10 @@ function renderRuntimeGate() {
       <div style="font-size:10px;color:${sc};line-height:1.6">${tx.whatBody}</div>
     </div>
 
-    <!-- Download + Progress system -->
-    <div id="swak-dl-area" style="width:100%;max-width:280px">
-
-      <!-- State: idle, show Download Now button -->
-      <div id="swak-dl-btn-wrap">
-        <button
-          onclick="startRuntimeDownload()"
-          style="width:100%;padding:13px;background:linear-gradient(135deg,#F59E0B,#D97706);border:none;border-radius:10px;color:#f0f0e8;font-weight:500;font-size:12px;cursor:pointer;font-family:inherit;letter-spacing:0.01em;box-shadow:0 4px 16px #F59E0B44">
-          ${tx.dlBtn}
-        </button>
-      </div>
-
-      <!-- State: downloading, progress bar (hidden by default) -->
-      <div id="swak-dl-progress" style="display:none">
-        <div style="font-size:10px;color:${C().text3};margin-bottom:6px;text-align:center">
-          ${lang==='fa'?'در حال دانلود...':lang==='ar'?'جارٍ التنزيل...':lang==='de'?'Wird heruntergeladen...':lang==='fr'?'Téléchargement...':lang==='es'?'Descargando...':lang==='zh'?'正在下载...':lang==='ru'?'Загрузка...':lang==='hi'?'डाउनलोड हो रहा है...':'Downloading...'}
-        </div>
-        <div style="background:${C().bg2};border-radius:6px;height:8px;overflow:hidden;border:1px solid ${C().border}">
-          <div id="swak-dl-bar" style="height:100%;background:linear-gradient(90deg,#F59E0B,#4ADE80);border-radius:6px;width:0%;transition:width 0.3s ease"></div>
-        </div>
-        <div id="swak-dl-pct" style="font-size:10px;color:#F59E0B;text-align:center;margin-top:4px;font-weight:600">0%</div>
-      </div>
-
-      <!-- State: done, open file prompt (hidden by default) -->
-      <div id="swak-dl-done" style="display:none">
-        <div style="padding:10px;background:${isDark?'#0F2A1A':'#DAFBE1'};border-radius:8px;border:1px solid ${isDark?'#4ADE8033':'#74C2A8'};text-align:center">
-          <div style="font-size:11px;color:#4ADE80;font-weight:600;margin-bottom:4px">
-            ${lang==='fa'?'✓ دانلود کامل شد, فایل را اجرا کنید':lang==='ar'?'✓ اكتمل التنزيل, قم بتشغيل الملف':lang==='de'?'✓ Download abgeschlossen, Datei ausführen':lang==='fr'?'✓ Téléchargement terminé, Lancez le fichier':lang==='es'?'✓ Descarga completa, Ejecute el archivo':lang==='zh'?'✓ 下载完成, 运行文件':lang==='ru'?'✓ Загрузка завершена, Запустите файл':lang==='hi'?'✓ डाउनलोड पूर्ण, फ़ाइल चलाएं':'✓ Download complete, Run the installer file'}
-          </div>
-          <div style="font-size:10px;color:${C().text3}">
-            ${lang==='fa'?'بعد از نصب، Excel را ببندید و دوباره باز کنید':lang==='ar'?'بعد التثبيت، أغلق Excel وأعد فتحه':lang==='de'?'Nach der Installation Excel schließen und neu öffnen':lang==='fr'?'Après installation, fermez et rouvrez Excel':lang==='es'?'Tras instalar, cierre y vuelva a abrir Excel':lang==='zh'?'安装后，关闭并重新打开 Excel':lang==='ru'?'После установки закройте и снова откройте Excel':lang==='hi'?'इंस्टॉल के बाद Excel बंद करें और दोबारा खोलें':'After installing, close and re-open Excel'}
-          </div>
-        </div>
-      </div>
-
-      <!-- State: error (hidden by default) -->
-      <div id="swak-dl-error" style="display:none">
-        <div style="padding:12px;background:${isDark?'#2A0F0F':'#FFEBE9'};border-radius:8px;border:1px solid #F8717133;text-align:center">
-          <div style="font-size:11px;color:#F87171;font-weight:600;margin-bottom:8px">
-            ${lang==='fa'?'خطا در دانلود. لطفاً دوباره امتحان کنید':lang==='ar'?'فشل التنزيل. يرجى المحاولة مرة أخرى':'Download failed. Please try again.'}
-          </div>
-          <button onclick="document.getElementById('swak-dl-error').style.display='none';startRuntimeDownload()"
-            style="font-size:11px;font-weight:700;color:#ffffff;background:#374151;border:1px solid #4B5563;border-radius:6px;padding:6px 20px;cursor:pointer;font-family:inherit">
-            ${lang==='fa'?'تلاش مجدد':lang==='ar'?'إعادة المحاولة':'Try again'}
-          </button>
-        </div>
-      </div>
-
-    </div>
+    <!-- Download button -->
+    <button onclick="(function(){var a=document.createElement('a');a.href=RUNTIME_DOWNLOAD_URL;a.download='SWAK_Runtime_Setup_latest.exe';a.style.display='none';document.body.appendChild(a);a.click();document.body.removeChild(a);})()" style="width:100%;max-width:280px;padding:13px;background:linear-gradient(135deg,#F59E0B,#D97706);border:none;border-radius:10px;color:#f0f0e8;font-weight:500;font-size:12px;cursor:pointer;font-family:inherit;letter-spacing:0.01em;box-shadow:0 4px 16px #F59E0B44">
+      ${tx.dlBtn}
+    </button>
 
     <!-- Re-check button -->
     <button
@@ -5411,91 +5378,6 @@ function renderRuntimeGate() {
   </div>`;
 }
 
-// ── Runtime Download with Progress ───────────────────────────────────────
-async function startRuntimeDownload() {
-  const btnWrap  = document.getElementById('swak-dl-btn-wrap');
-  const progress = document.getElementById('swak-dl-progress');
-  const bar      = document.getElementById('swak-dl-bar');
-  const pct      = document.getElementById('swak-dl-pct');
-  const done     = document.getElementById('swak-dl-done');
-  const errBox   = document.getElementById('swak-dl-error');
-
-  if (!btnWrap || !progress) return;
-
-  // Show progress bar
-  btnWrap.style.display  = 'none';
-  progress.style.display = 'block';
-  done.style.display     = 'none';
-  errBox.style.display   = 'none';
-
-  try {
-    // Fetch with progress tracking
-    const response = await fetch(RUNTIME_DOWNLOAD_URL);
-
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
-    const contentLength = response.headers.get('Content-Length');
-    const total         = contentLength ? parseInt(contentLength) : 0;
-    const reader        = response.body.getReader();
-    const chunks        = [];
-    let   received      = 0;
-
-    while (true) {
-      const { done: streamDone, value } = await reader.read();
-      if (streamDone) break;
-      chunks.push(value);
-      received += value.length;
-
-      // Update progress bar
-      if (total > 0) {
-        const p = Math.round((received / total) * 100);
-        bar.style.width = p + '%';
-        pct.textContent = p + '%';
-      } else {
-        // Unknown size, animate
-        const p = Math.min(90, Math.round((received / (10 * 1024 * 1024)) * 100));
-        bar.style.width = p + '%';
-        pct.textContent = _formatBytes(received) + ' downloaded...';
-      }
-    }
-
-    // Combine chunks
-    bar.style.width = '100%';
-    pct.textContent = '100%';
-    const blob     = new Blob(chunks);
-    const url      = URL.createObjectURL(blob);
-    const filename = RUNTIME_DOWNLOAD_URL.split('/').pop() || 'SWAK_Runtime_Setup.exe';
-
-    // Trigger browser download
-    const a    = document.createElement('a');
-    a.href     = url;
-    a.download = filename;
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(url), 5000);
-
-    // Show done state
-    await new Promise(r => setTimeout(r, 500));
-    progress.style.display = 'none';
-    done.style.display     = 'block';
-
-    // Auto re-check after 30s (enough time to run installer)
-    setTimeout(() => {
-      recheckRuntime();
-    }, 30000);
-
-  } catch (err) {
-    console.error('[SWAK] Download failed:', err);
-    progress.style.display = 'none';
-    errBox.style.display   = 'block';
-    // No fallback — user must retry via the downloader
-  }
-}
-
-function _formatBytes(bytes) {
-  if (bytes < 1024)        return bytes + ' B';
-  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(0) + ' KB';
-  return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
-}
 
 // ── Re-check runtime (called by retry button) ─────────────────────────────
 async function recheckRuntime() {
