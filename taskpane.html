@@ -5481,9 +5481,9 @@ async function _postRuntimeStartup() {
 // ── TOOL CLICK RUNTIME GUARD ──────────────────────────────────────────────
 // Called before every tool execution to guard against mid-session uninstall
 async function guardRuntime() {
-  const ok = await checkRuntime(false);
+  // Always force-check on every tool run — catches uninstalled runtime
+  const ok = await checkRuntime(true);
   if (!ok) {
-    // Runtime disappeared, show gate immediately
     runtimeAvailable = false;
     currentScreen = 'runtime-gate';
     rf(false);
