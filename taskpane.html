@@ -5268,15 +5268,15 @@ function renderRuntimeGate() {
             : lang==='hi' ? 'SWAK Runtime इंस्टॉल नहीं है'
             : 'Swak Data Tools runtime',
 
-    body:     lang==='fa' ? 'اگر قبلاً Runtime را نصب کرده‌اید، ممکن است در Tray ویندوز غیرفعال باشد یا در حال اجرا نباشد. آن را از منوی Start اجرا کنید. اگر هنوز نصب نکرده‌اید، ابتدا آن را دانلود و نصب کنید. راه‌انداز به صورت کاملاً ایمن روی دستگاه شما اجرا می‌شود و هیچ داده‌ای از کامپیوتر شما خارج نمی‌شود.'
-            : lang==='ar' ? 'إذا كنت قد ثبّت Runtime مسبقاً، فقد يكون غير نشط في Tray ويندوز أو لا يعمل حالياً. شغّله من قائمة Start. إذا لم تثبّته بعد، نزّله أولاً وثبّته. يعمل بشكل آمن محلياً ولا يُرسل أي بيانات خارج جهازك.'
-            : lang==='de' ? 'Wenn Sie Runtime bereits installiert haben, ist es möglicherweise im Windows Tray inaktiv oder läuft nicht. Starten Sie es über das Startmenü. Falls noch nicht installiert, laden Sie es herunter und installieren Sie es. Es läuft sicher lokal und sendet keine Daten nach außen.'
-            : lang==='fr' ? 'Si vous avez déjà installé Runtime, il est peut-être inactif dans le Tray Windows ou pas en cours d\'exécution. Lancez-le depuis le menu Démarrer. Si ce n\'est pas encore installé, téléchargez-le d\'abord. Il s\'exécute localement en toute sécurité, aucune donnée n\'est envoyée à l\'extérieur.'
-            : lang==='es' ? 'Si ya instaló Runtime, puede estar inactivo en el Tray de Windows o no estar ejecutándose. Inícielo desde el menú Inicio. Si aún no lo instaló, descárguelo primero. Se ejecuta localmente de forma segura y no envía datos al exterior.'
-            : lang==='zh' ? '如果您已安装 Runtime，它可能在 Windows 系统托盘中处于非活动状态或未运行--请从开始菜单启动它。如果尚未安装，请先下载安装。它完全在本地安全运行，不向外部发送任何数据。'
-            : lang==='ru' ? 'Если вы уже установили Runtime, он может быть неактивен в трее Windows или не запущен. Запустите его через меню Пуск. Если ещё не установлен, сначала скачайте и установите его. Он работает локально и не отправляет данные за пределы компьютера.'
-            : lang==='hi' ? 'अगर आपने Runtime पहले से इंस्टॉल किया है, तो यह Windows Tray में निष्क्रिय हो सकता है या चल नहीं रहा. इसे Start मेनू से चलाएं। अगर अभी इंस्टॉल नहीं किया है, तो पहले डाउनलोड करें। यह पूरी तरह आपके डिवाइस पर सुरक्षित चलता है।'
-            : 'If you already installed the Runtime, it may be inactive in the Windows Tray or not currently running. Launch it from the Start menu. If you haven\'t installed it yet, download and install it first. It runs securely on your local machine and no data ever leaves your computer.',
+    body:     lang==='fa' ? 'اگر نصب کرده‌اید از Start اجرا کنید. اگر نصب نکرده‌اید آن را دانلود کنید.'
+            : lang==='ar' ? 'إذا ثبّته، شغّله من Start. وإلا، نزّله أولاً.'
+            : lang==='de' ? 'Wenn installiert, über Startmenü starten. Sonst herunterladen.'
+            : lang==='fr' ? 'Si installé, lancez depuis Démarrer. Sinon, téléchargez-le.'
+            : lang==='es' ? 'Si instalado, inícielo desde Inicio. Si no, descárguelo primero.'
+            : lang==='zh' ? '已安装则从开始菜单启动。未安装则先下载。'
+            : lang==='ru' ? 'Если установлен, запустите через Пуск. Иначе скачайте.'
+            : lang==='hi' ? 'इंस्टॉल है तो Start से चलाएं। नहीं है तो डाउनलोड करें।'
+            : 'If installed, launch from Start menu. If not, download it first.',
 
     whatIs:   lang==='fa' ? 'ℹ️ Swak Data Tools Runtime چیست؟'
             : lang==='ar' ? 'ℹ️ ما هو Swak Data Tools Runtime؟'
@@ -5368,10 +5368,16 @@ function renderRuntimeGate() {
 
     <!-- Re-check button -->
     <button
+      id="swak-recheck-btn"
       onclick="recheckRuntime()"
-      style="width:100%;max-width:280px;padding:11px;background:none;border:1px solid ${bc};border-radius:10px;color:${sc};font-size:11px;cursor:pointer;font-family:inherit">
+      style="width:100%;max-width:280px;padding:11px;background:none;border:1px solid ${bc};border-radius:10px;color:${sc};font-size:11px;cursor:pointer;font-family:inherit;transition:all .2s">
       ${tx.retryBtn}
     </button>
+
+    <!-- Firewall warning -->
+    <div style="width:100%;max-width:280px;padding:5px 9px;background:${isDark?'rgba(245,158,11,.1)':'rgba(245,158,11,.08)'};border:1px solid rgba(245,158,11,.25);border-radius:6px">
+      <div style="font-size:9px;color:#F59E0B;line-height:1.4">⚠ ${lang==='fa'?'اگر نصب شده ولی کار نمی‌کند، فایروال ممکن است پورت ۵۰۰۰ را مسدود کرده باشد.':lang==='ar'?'إذا لم يعمل رغم تثبيته، جدار الحماية قد يحجب المنفذ 5000.':lang==='de'?'Firewall könnte Port 5000 blockieren.':lang==='fr'?'Le pare-feu bloque peut-être le port 5000.':lang==='es'?'El firewall puede bloquear el puerto 5000.':lang==='zh'?'防火墙可能阻止端口5000。':lang==='ru'?'Брандмауэр мог заблокировать порт 5000.':lang==='hi'?'Firewall पोर्ट 5000 ब्लॉक कर सकता है।':'Firewall may be blocking port 5000.'}</div>
+    </div>
 
     <!-- Version -->
     <div style="font-size:9px;color:${C().text4};margin-top:4px">Swak Data Tools v${APP_VERSION||'1'}</div>
@@ -5381,24 +5387,49 @@ function renderRuntimeGate() {
 
 // ── Re-check runtime (called by retry button) ─────────────────────────────
 async function recheckRuntime() {
-  // Show spinner on retry button
-  const frame = document.getElementById('frame');
+  // Animate button while checking
+  const btn = document.getElementById('swak-recheck-btn');
+  const originalText = btn ? btn.textContent : '';
+  const loadingText = lang==='fa'?'در حال بررسی...'
+    :lang==='ar'?'جارٍ التحقق...'
+    :lang==='de'?'Wird geprüft...'
+    :lang==='fr'?'Vérification...'
+    :lang==='es'?'Verificando...'
+    :lang==='zh'?'检查中...'
+    :lang==='ru'?'Проверка...'
+    :lang==='hi'?'जांच हो रही है...'
+    :'Checking...';
+  if (btn) {
+    btn.disabled = true;
+    btn.style.opacity = '0.6';
+    btn.style.cursor = 'not-allowed';
+    btn.textContent = loadingText;
+    // Animate dots
+    let dots = 0;
+    btn._dotTimer = setInterval(() => {
+      dots = (dots + 1) % 4;
+      btn.textContent = loadingText.replace('...', '.'.repeat(dots || 1));
+    }, 400);
+  }
   runtimeAvailable = null;
-  appStarting = true;
-  startupStatus = 'connecting';
-  rf(false);
-  await new Promise(r => setTimeout(r, 400));
-  const ok = await checkRuntime(true);
   appStarting = false;
+  await new Promise(r => setTimeout(r, 300));
+  const ok = await checkRuntime(true);
+  // Restore button
+  if (btn) {
+    clearInterval(btn._dotTimer);
+    btn.disabled = false;
+    btn.style.opacity = '1';
+    btn.style.cursor = 'pointer';
+    btn.textContent = originalText;
+  }
   if (ok) {
-    // Runtime found, disable protection and continue
     _deactivateAntiTamper();
     startupStatus = 'ready';
     rf(false);
     await new Promise(r => setTimeout(r, 300));
     await _postRuntimeStartup();
   } else {
-    // Still not found, stay on gate
     currentScreen = 'runtime-gate';
     rf(false);
   }
