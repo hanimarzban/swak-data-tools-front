@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<OfficeApp
+  xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
+  xmlns:ov="http://schemas.microsoft.com/office/taskpaneappversionoverrides"
+  xsi:type="TaskPaneApp">
+
+  <!-- ---------------------------------------------------------------
+       Swak Data Tools — Excel Add-in Manifest
+       Version: 2.0.0
+       Publisher: SwakSoft
+       GUID: 7bfc536c-7e80-4462-9d0c-7974ce51f943
+  --------------------------------------------------------------- -->
+
+  <Id>7bfc536c-7e80-4462-9d0c-7974ce51f943</Id>
+  <Version>1.0.0.0</Version>
+  <ProviderName>SwakSoft</ProviderName>
+  <DefaultLocale>en-US</DefaultLocale>
+
+  <DisplayName DefaultValue="Swak Data Tools"/>
+  <Description DefaultValue="215 professional data tools for Data Scientists, Analysts and Engineers. Clean, transform, analyze, run ML and AI operations directly inside Excel. Requires Swak Data Tools Runtime (free download at swaksoft.com)."/>
+
+  <!-- Icons — hosted on CDN -->
+  <IconUrl DefaultValue="https://swaksoft.com/assets/icon-32.png"/>
+  <HighResolutionIconUrl DefaultValue="https://swaksoft.com/assets/icon-80.png"/>
+  <SupportUrl DefaultValue="https://swaksoft.com/support"/>
+
+  <!-- Allowed domains -->
+  <AppDomains>
+    <AppDomain>https://swaksoft.com</AppDomain>
+    <AppDomain>https://hanimarzban.github.io</AppDomain>
+    <AppDomain>https://api.swaksoft.com</AppDomain>
+    <AppDomain>https://cdn.swaksoft.com</AppDomain>
+    <AppDomain>https://apklqlvcwrtjdcfuplyr.supabase.co</AppDomain>
+    <AppDomain>https://api.anthropic.com</AppDomain>
+  </AppDomains>
+
+  <!-- AppSource screenshots -->
+  <ScreenShots>
+    <ScreenShot DefaultValue="https://swaksoft.com/assets/screenshot-1.png"/>
+    <ScreenShot DefaultValue="https://swaksoft.com/assets/screenshot-2.png"/>
+    <ScreenShot DefaultValue="https://swaksoft.com/assets/screenshot-3.png"/>
+  </ScreenShots>
+
+  <!-- Hosts: Excel Desktop + Web -->
+  <Hosts>
+    <Host Name="Workbook"/>
+  </Hosts>
+
+  <!-- Default taskpane URL -->
+  <DefaultSettings>
+    <SourceLocation DefaultValue="https://hanimarzban.github.io/swak-data-tools-front/taskpane.html"/>
+  </DefaultSettings>
+
+  <!-- Permissions: full read/write access to workbook -->
+  <Permissions>ReadWriteDocument</Permissions>
+
+  <!-- Requirements: minimum Office version -->
+  <Requirements>
+    <Sets DefaultMinVersion="1.7">
+      <Set Name="ExcelApi" MinVersion="1.7"/>
+    </Sets>
+  </Requirements>
+
+  <!-- ---------------------------------------------------------------
+       Version Overrides — Ribbon button + multilingual support
+  --------------------------------------------------------------- -->
+  <VersionOverrides
+    xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides"
+    xsi:type="VersionOverridesV1_0">
+
+    <Hosts>
+      <Host xsi:type="Workbook">
+        <DesktopFormFactor>
+
+          <ExtensionPoint xsi:type="PrimaryCommandSurface">
+            <CustomTab id="SwakTab">
+
+              <Group id="SwakGroup">
+                <Label resid="GroupLabel"/>
+
+                <!-- Main button: open SWAK taskpane -->
+                <Control xsi:type="Button" id="SwakOpenButton">
+                  <Label resid="Btn.Open.Label"/>
+                  <Supertip>
+                    <Title resid="Btn.Open.Label"/>
+                    <Description resid="Btn.Open.Tooltip"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16"  resid="Icon.16x16"/>
+                    <bt:Image size="32"  resid="Icon.32x32"/>
+                    <bt:Image size="80"  resid="Icon.80x80"/>
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <TaskpaneId>SwakTaskpane</TaskpaneId>
+                    <SourceLocation resid="Taskpane.Url"/>
+                  </Action>
+                </Control>
+
+              </Group>
+
+              <!-- Tab label — localized -->
+              <Label resid="TabLabel"/>
+
+            </CustomTab>
+          </ExtensionPoint>
+
+        </DesktopFormFactor>
+      </Host>
+    </Hosts>
+
+    <!-- ── Localization ────────────────────────────────────────── -->
+    <Resources>
+
+      <!-- Icons -->
+      <bt:Images>
+        <bt:Image id="Icon.16x16" DefaultValue="https://cdn.swaksoft.com/assets/icon-16.png"/>
+        <bt:Image id="Icon.32x32" DefaultValue="https://cdn.swaksoft.com/assets/icon-32.png"/>
+        <bt:Image id="Icon.80x80" DefaultValue="https://cdn.swaksoft.com/assets/icon-80.png"/>
+      </bt:Images>
+
+      <!-- URLs -->
+      <bt:Urls>
+        <bt:Url id="Taskpane.Url"
+          DefaultValue="https://hanimarzban.github.io/swak-data-tools-front/taskpane.html"
+          fa-IR="https://hanimarzban.github.io/swak-data-tools-front/taskpane.html?lang=fa"
+          ar-SA="https://hanimarzban.github.io/swak-data-tools-front/taskpane.html?lang=ar"
+          de-DE="https://hanimarzban.github.io/swak-data-tools-front/taskpane.html?lang=de"
+          fr-FR="https://hanimarzban.github.io/swak-data-tools-front/taskpane.html?lang=fr"
+          es-ES="https://hanimarzban.github.io/swak-data-tools-front/taskpane.html?lang=es"
+          zh-CN="https://hanimarzban.github.io/swak-data-tools-front/taskpane.html?lang=zh"
+          ru-RU="https://hanimarzban.github.io/swak-data-tools-front/taskpane.html?lang=ru"
+          hi-IN="https://hanimarzban.github.io/swak-data-tools-front/taskpane.html?lang=hi"/>
+      </bt:Urls>
+
+      <!-- Short strings — localized -->
+      <bt:ShortStrings>
+
+        <!-- Tab label -->
+        <bt:String id="TabLabel"
+          DefaultValue="SWAK"
+          fa-IR="سواک"
+          ar-SA="سواك"
+          de-DE="SWAK"
+          fr-FR="SWAK"
+          es-ES="SWAK"
+          zh-CN="SWAK"
+          ru-RU="SWAK"
+          hi-IN="SWAK"/>
+
+        <!-- Group label -->
+        <bt:String id="GroupLabel"
+          DefaultValue="Data Tools"
+          fa-IR="ابزار داده"
+          ar-SA="أدوات البيانات"
+          de-DE="Datenwerkzeuge"
+          fr-FR="Outils de données"
+          es-ES="Herramientas de datos"
+          zh-CN="数据工具"
+          ru-RU="Инструменты данных"
+          hi-IN="डेटा टूल्स"/>
+
+        <!-- Button label -->
+        <bt:String id="Btn.Open.Label"
+          DefaultValue="Open SWAK"
+          fa-IR="باز کردن SWAK"
+          ar-SA="فتح SWAK"
+          de-DE="SWAK öffnen"
+          fr-FR="Ouvrir SWAK"
+          es-ES="Abrir SWAK"
+          zh-CN="打开 SWAK"
+          ru-RU="Открыть SWAK"
+          hi-IN="SWAK खोलें"/>
+
+      </bt:ShortStrings>
+
+      <!-- Long strings — localized tooltips -->
+      <bt:LongStrings>
+        <bt:String id="Btn.Open.Tooltip"
+          DefaultValue="Open Swak Data Tools — 215 professional tools for cleaning, analysis, ML &amp; AI directly in Excel."
+          fa-IR="باز کردن ابزارهای SWAK — ۲۱۵ ابزار حرفه‌ای برای پاکسازی، تحلیل، ML و هوش مصنوعی مستقیم در اکسل."
+          ar-SA="فتح Swak Data Tools — ٢١٥ أداة احترافية للتنظيف والتحليل والذكاء الاصطناعي مباشرة في Excel."
+          de-DE="Swak Data Tools öffnen — 215 professionelle Tools für Bereinigung, Analyse, ML &amp; KI direkt in Excel."
+          fr-FR="Ouvrir Swak Data Tools — 215 outils professionnels pour le nettoyage, l'analyse, ML &amp; IA directement dans Excel."
+          es-ES="Abrir Swak Data Tools — 215 herramientas profesionales para limpieza, análisis, ML &amp; IA directamente en Excel."
+          zh-CN="打开 Swak Data Tools — 215 个专业工具，直接在 Excel 中进行清理、分析、机器学习和人工智能。"
+          ru-RU="Открыть Swak Data Tools — 215 профессиональных инструментов для очистки, анализа, ML и ИИ прямо в Excel."
+          hi-IN="Swak Data Tools खोलें — Excel में सीधे सफाई, विश्लेषण, ML और AI के लिए 215 पेशेवर टूल्स।"/>
+      </bt:LongStrings>
+
+    </Resources>
+
+  </VersionOverrides>
+
+</OfficeApp>
